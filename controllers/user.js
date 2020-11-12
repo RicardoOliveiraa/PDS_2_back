@@ -75,7 +75,7 @@ module.exports = {
                     if (isEqual) {
                         const payload = JSON.stringify({_id: userData._id})
 
-                        const token = jwt.sign(payload, process.env.AUTH_KEY)
+                        const token = jwt.sign(payload, AUTH_KEY)
 
                         if (token) {
                             res.json({
