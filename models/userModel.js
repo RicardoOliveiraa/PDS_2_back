@@ -18,7 +18,23 @@ const userModel = Schema({
         }
     ],
     last_seen_movie_time: { type: Date },
-    plan: { type: String, required: true}
+    plan: { type: String, required: true},
+    sub_user: [
+        {
+            name: { type: String, required: true },
+            liked_categorys: [
+                {
+                    name: { typer: String }
+                }
+            ],
+            seen_movies: [
+                {
+                    movie: { type: Schema.Types.ObjectId, ref: 'movie'}
+                }
+            ],
+            last_seen_movie_time: { type: Date },
+        }
+    ]
 })
 
 userModel.set('timestamps', true);
