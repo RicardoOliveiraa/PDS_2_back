@@ -46,7 +46,8 @@ module.exports = {
                             console.log('aqui o carai do erro', err)
                             res.json({
                                 success: false,
-                                message: 'Deu treta na criação do usuário'
+                                message: 'Deu treta na criação do usuário',
+                                error: err
                             })
                         })
                 }
