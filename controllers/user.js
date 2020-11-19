@@ -1,5 +1,22 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+
+let transporter = nodemailer.createTransport({
+    //Aqui vai ficar o host do servidor de email que vamos usar, tem que criar um email para a conta
+    //Vou deixar gmail mas só trocar depois
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: false,
+    auth: {
+        //Aqui vai ficar o email que vai mandar as mensagens.
+        user: "Disneyflix@gmail.com",
+        password: "SenhaProvisóriaShow",
+
+    }
+})
+
+
 
 const {
     genericGetUser,
@@ -37,9 +54,22 @@ module.exports = {
 
                     createUser(userObj)
                         .then(response => {
+                            //Parte de mandar email aqui após o cadastro bem sucedido
+                            transporter.sendMail({
+                              from: "DisneyFlix <Disneyflix@gmail.com>",
+                              to: userObj.email,
+                              subject: "Aqui fica o titulo do email",
+                              text: "Texto do email",
+                              html: "Da de mandar html, imagino que seja legal um link para o site de volta <a href='https://disneyflix.com'>Só dale</a> estilo assim"   
+                            }).then(message => {
+                                console.log("Foi" , message);
+                            }).catch(err => {
+                                console.log("Não foi" , err);
+                            })
+                            //Termina parte de enviar email
                             res.json({
                                 success: true,
-                                data: response
+                                data: response,
                             })
                         })
                         .catch(err => {
