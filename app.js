@@ -38,6 +38,12 @@ app.use(
     })
 )
 
+app.use(express.static(__dirname + "/build"))
+
+app.get('/', (req, res) => {
+    res.render(path.join(__dirname + "/build/index.html"))
+})
+
 app.use(cors());
 connect()
     .then(() => {
@@ -48,13 +54,6 @@ connect()
             })
         }
     })
-
-app.get('/', (req, res) => {
-    res.json({
-        success: true,
-        message: 'Ok.. to aqui :)'
-    })
-})
 
 const noAuthRoutes = require('./routes/noauth/routes')
 app.use("/", noAuthRoutes)
