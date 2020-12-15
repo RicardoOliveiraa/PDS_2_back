@@ -44,23 +44,29 @@ module.exports = {
                     })
                     console.log('aqui o carai do erro', err)
                 } else {
+                    const profile_users = [
+                        {
+                            picture: '1',
+                            name,
+                        }
+                    ]
                     const userObj = Object.assign({}, {
-                        name,
                         email,
                         password: hashedPassword,
                         payment_method,
-                        plan
+                        plan,
+                        profile_users
                     })
 
                     createUser(userObj)
                         .then(response => {
                             //Parte de mandar email aqui após o cadastro bem sucedido
                             transporter.sendMail({
-                              from: "DisneyFlix <Disneyflix@gmail.com>",
-                              to: userObj.email,
-                              subject: "Aqui fica o titulo do email",
-                              text: "Texto do email",
-                              html: "Da de mandar html, imagino que seja legal um link para o site de volta <a href='https://disneyflix.com'>Só dale</a> estilo assim"   
+                                from: "DisneyFlix <Disneyflix@gmail.com>",
+                                to: userObj.email,
+                                subject: "Aqui fica o titulo do email",
+                                text: "Texto do email",
+                                html: "Da de mandar html, imagino que seja legal um link para o site de volta <a href='https://disneyflix.com'>Só dale</a> estilo assim"   
                             }).then(message => {
                                 console.log("Foi" , message);
                             }).catch(err => {
