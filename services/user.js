@@ -8,13 +8,13 @@ module.exports = {
         .lean()
     },
 
-    createUser: ({name, password, email, payment_method, plan}) => {
+    createUser: ({ password, email, payment_method, plan, profile_users }) => {
         return new userModel({
-            name,
             password,
             email,
             payment_method,
-            plan
+            plan,
+            profile_users
         })
         .save()
     },

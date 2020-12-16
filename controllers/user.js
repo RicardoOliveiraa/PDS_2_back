@@ -36,7 +36,7 @@ module.exports = {
         } = req.body
 
         if (password === passwordCheck) {
-            bcrypt.hash(password, 8, (err, hashedPassword) => {
+            bcrypt.hash(password, 8, async (err, hashedPassword) => {
                 if (err) {
                     res.json({
                         success: false,
@@ -50,6 +50,7 @@ module.exports = {
                             name,
                         }
                     ]
+
                     const userObj = Object.assign({}, {
                         email,
                         password: hashedPassword,
@@ -58,34 +59,44 @@ module.exports = {
                         profile_users
                     })
 
-                    createUser(userObj)
-                        .then(response => {
-                            //Parte de mandar email aqui após o cadastro bem sucedido
-                            transporter.sendMail({
-                                from: "DisneyFlix <Disneyflix@gmail.com>",
-                                to: userObj.email,
-                                subject: "Aqui fica o titulo do email",
-                                text: "Texto do email",
-                                html: "Da de mandar html, imagino que seja legal um link para o site de volta <a href='https://disneyflix.com'>Só dale</a> estilo assim"   
-                            }).then(message => {
-                                console.log("Foi" , message);
-                            }).catch(err => {
-                                console.log("Não foi" , err);
-                            })
-                            //Termina parte de enviar email
-                            res.json({
-                                success: true,
-                                data: response,
-                            })
+                    const userData = await genericGetUser({ email })
+
+                    if (userData) {
+                        res.json({
+                            success: false,
+                            message: "Já existe uma conta com esse email, tente realizar o login"
                         })
-                        .catch(err => {
-                            console.log('aqui o carai do erro', err)
-                            res.json({
-                                success: false,
-                                message: 'Deu treta na criação do usuário',
-                                error: err
+                    } else {
+                        createUser(userObj)
+                            .then(response => {
+                                //Parte de mandar email aqui após o cadastro bem sucedido
+                                // transporter.sendMail({
+                                //     from: "DisneyFlix <Disneyflix@gmail.com>",
+                                //     to: userObj.email,
+                                //     subject: "Aqui fica o titulo do email",
+                                //     text: "Texto do email",
+                                //     html: "Da de mandar html, imagino que seja legal um link para o site de volta <a href='https://disneyflix.com'>Só dale</a> estilo assim"   
+                                // }).then(message => {
+                                //     console.log("Foi" , message);
+                                // }).catch(err => {
+                                //     console.log("Não foi" , err);
+                                // })
+                                //Termina parte de enviar email
+                                res.json({
+                                    success: true,
+                                    data: response,
+                                })
                             })
-                        })
+                            .catch(err => {
+                                console.log('aqui o carai do erro', err)
+                                res.json({
+                                    success: false,
+                                    message: 'Ocorreu um erro na criação do usuário ):',
+                                    error: err
+                                })
+                            })
+                    }
+
                 }
             })
         } else {
@@ -118,7 +129,7 @@ module.exports = {
                             res.json({
                                 success: true,
                                 token,
-                                data: {
+                                user: {
                                     ...userData
                                 }
                             })
