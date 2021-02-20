@@ -1,9 +1,11 @@
 const router = express.Router()
 
 const {
-    addUser
+    addUser,
+    UpdateUserSubUsers
 } = require('../../controllers/user')
 
 module.exports =
     router
         .post('/', addUser)
+        .post('/update', UpdateUserSubUsers)

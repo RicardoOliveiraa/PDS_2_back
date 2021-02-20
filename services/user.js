@@ -28,5 +28,19 @@ module.exports = {
                 ...props
             )
             .exec()
+    },
+
+    UpdateUserSubUsers: (email,subUser) => {
+        return userModel
+            .updateOne(
+                {
+                    email: email,
+                    
+                },{
+                    profile_users: subUser
+                }
+                 
+            )
+            .push()
     }
 }
