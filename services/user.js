@@ -37,10 +37,10 @@ module.exports = {
                     email: email,
                     
                 },{
-                    profile_users: subUser
+                    profile_users: {$push: subUser}
                 }
                  
             )
-            .push()
+            .exec()
     }
 }
