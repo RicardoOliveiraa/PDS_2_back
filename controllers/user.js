@@ -183,11 +183,11 @@ module.exports = {
                     picture:picture,
                     name: name,
                     liked_categories : liked_categories,
-                    seen_movies : seen_movies,
-                    last_seen_movie_time : last_seen_movie_time
+                    seen_movies : [],
+                    last_seen_movie_time : ""
                 }
-                const userDataUpdate = await UpdateUserSubUsers({ email,SubUser })
-
+                const userDataUpdate = await UpdateUserSubUsers( email,SubUser )
+                
                 if (userDataUpdate) {
                     res.json({
                         success: true,
