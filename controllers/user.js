@@ -21,7 +21,8 @@ let transporter = nodemailer.createTransport({
 const {
     genericGetUser,
     createUser,
-    genericUpdateUser
+    genericUpdateUser,
+    UpdateUserSubUsers
 } = require('../services/user')
 
 module.exports = {
@@ -162,6 +163,53 @@ module.exports = {
             res.json({
                 success: false,
                 message: 'Campos são obrigatórios para realizar o login!'
+            })
+        }
+    },
+
+    UpdateUserSubUsers:  async (req, res) => {
+        const {
+            email,
+            picture,
+            name,
+            liked_categories,
+            seen_movies,
+            last_seen_movie_time
+        } = req.body
+
+        if (picture && name && liked_categories && seen_movies && last_seen_movie_time){
+            try {
+                SubUser = {
+                    picture:picture,
+                    name: name,
+                    liked_categories : liked_categories,
+                    seen_movies : [],
+                    last_seen_movie_time : ""
+                }
+                const userDataUpdate = await UpdateUserSubUsers( email,SubUser )
+                
+                if (userDataUpdate) {
+                    res.json({
+                        success: true,
+                        message: 'Sub usuário/s adicionados com sucesso!'
+                    })
+                }else{
+                    res.json({
+                        success: false,
+                        message: 'Houve um erro ao adicionar usuários!'
+                    })
+                }
+            } catch (err) {
+                res.json({
+                    success: false,
+                    message: 'Opsss! )=',
+                    error: String(err)
+                })
+            }
+        }else{
+            res.json({
+                success: false,
+                message: 'Não foram preenchidos todos os dados!'
             })
         }
     }
