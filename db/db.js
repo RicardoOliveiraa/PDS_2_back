@@ -12,17 +12,13 @@ const connect = async () => {
                 useUnifiedTopology: true
             },
         )
-    
 }
 
 const close = async () => {
     mongoose.Schemas = {}
     mongoose.models = {}
     await mongoose.disconnect();
-    if (process.env.NODE_ENV == 'test') {
-        await mongoServer.stop();
-    } 
-    
+    if (process.env.NODE_ENV == 'test') await mongoServer.stop()
 }
 
 module.exports = {
