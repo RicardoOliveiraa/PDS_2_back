@@ -184,7 +184,6 @@ module.exports = {
                     liked_categories: liked_categories.split(','),
                 }
 
-                console.log("Aqui o id do user", userId)
                 const userDataUpdate = await updateUserSubUsers(userId, subUser)
 
                 if (userDataUpdate) {
