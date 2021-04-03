@@ -16,13 +16,11 @@ let transporter = nodemailer.createTransport({
     }
 })
 
-
-
 const {
     genericGetUser,
     createUser,
     genericUpdateUser,
-    UpdateUserSubUsers
+    updateUserSubUsers
 } = require('../services/user')
 
 module.exports = {
@@ -122,7 +120,7 @@ module.exports = {
                     const isEqual = bcrypt.compareSync(password, userData.password)
 
                     if (isEqual) {
-                        const payload = JSON.stringify({_id: userData._id})
+                        const payload = JSON.stringify({userId: userData._id})
 
                         const token = jwt.sign(payload, AUTH_KEY)
 
@@ -167,33 +165,34 @@ module.exports = {
         }
     },
 
-    UpdateUserSubUsers:  async (req, res) => {
+    updateUserSubUsers:  async (req, res) => {
         const {
-            email,
             picture,
             name,
             liked_categories,
-            seen_movies,
-            last_seen_movie_time
         } = req.body
 
-        if (picture && name && liked_categories && seen_movies && last_seen_movie_time){
+        const {
+            userId
+        } = req.decoded
+
+        if (picture && name && liked_categories) {
             try {
-                SubUser = {
-                    picture:picture,
-                    name: name,
-                    liked_categories : liked_categories,
-                    seen_movies : [],
-                    last_seen_movie_time : ""
+                const subUser = {
+                    picture,
+                    name,
+                    liked_categories: liked_categories.split(','),
                 }
-                const userDataUpdate = await UpdateUserSubUsers( email,SubUser )
-                
+
+                console.log("Aqui o id do user", userId)
+                const userDataUpdate = await updateUserSubUsers(userId, subUser)
+
                 if (userDataUpdate) {
                     res.json({
                         success: true,
-                        message: 'Sub usuário/s adicionados com sucesso!'
+                        data: userDataUpdate.profile_users
                     })
-                }else{
+                } else {
                     res.json({
                         success: false,
                         message: 'Houve um erro ao adicionar usuários!'
@@ -206,7 +205,7 @@ module.exports = {
                     error: String(err)
                 })
             }
-        }else{
+        } else {
             res.json({
                 success: false,
                 message: 'Não foram preenchidos todos os dados!'

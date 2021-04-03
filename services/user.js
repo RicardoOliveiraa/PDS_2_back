@@ -30,16 +30,20 @@ module.exports = {
             .exec()
     },
 
-    UpdateUserSubUsers: (email,SubUser) => {
+    updateUserSubUsers: (userId, subUser) => {
         return userModel
-            .updateOne(
+            .findOneAndUpdate( 
                 {
-                    email: email,
-                    
-                },{
-                    profile_users: {$push: SubUser}
+                    _id: userId,
+                },
+                {
+                    $push: {
+                        profile_users: subUser
+                    }
+                },
+                {
+                    new: true
                 }
-                 
             )
             .exec()
     }
