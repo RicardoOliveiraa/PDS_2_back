@@ -13,7 +13,7 @@ const userModel = Schema({
             name: { type: String, required: true },
             liked_categories: [
                 {
-                    name: { type: String, required: false }
+                    type: String, required: false 
                 }
             ],
             seen_movies: [

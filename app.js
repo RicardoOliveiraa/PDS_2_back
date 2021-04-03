@@ -7,7 +7,7 @@ moment.tz.setDefault("America/Sao_Paulo");
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
-AUTH_KEY = process.env.NODE_ENV ? process.env.NODE_ENV.AUTH_KEY || process.env.AUTH_KEY : process.env.AUTH_KEY
+AUTH_KEY = process.env.NODE_ENV ? process.env.NODE_ENV.AUTH_KEY: process.env.AUTH_KEY
 
 const {
     connect,
@@ -48,9 +48,9 @@ app.use(cors());
 connect()
     .then(() => {
         if (!module.parent) {
-            console.log('DB Connection established with success! :-)');
+            console.log('Conexão com banco estabelecida! :-)');
             server.listen(port, () => {
-                console.log('server is now running on port ' + port);
+                console.log('Servidor rodando na porta ' + port);
             })
         }
     })
@@ -58,7 +58,7 @@ connect()
 const noAuthRoutes = require('./routes/noauth/routes')
 app.use("/", noAuthRoutes)
 
-// const authRoutes = require('./routes/auth/routes')
-// app.use("/auth", authRoutes)
+const authRoutes = require('./routes/auth/routes')
+app.use("/auth", authRoutes)
 
 module.exports = app;

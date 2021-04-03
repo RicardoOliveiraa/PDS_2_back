@@ -6,4 +6,6 @@ const movieModel = Schema({
     total_seen_times: { type: Number, default: 0 }
 })
 
+movieModel.set('timestamps', true);
+
 module.exports = mongoose.model('movie', movieModel)
