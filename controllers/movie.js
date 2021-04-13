@@ -18,13 +18,13 @@ module.exports = {
 
        
 
-        const response = await sendMovieToDrive({ body: "./resources/bunny.mp4", name: "tretinha" })
+        const response = await sendMovieToDrive({ body: file, name: title })
 
         const MovieObj = {
-            title: "tretinha",
-            studio: "us guri",
-            launch_date: new Date(),
-            gender: "Treta",
+            title,
+            studio,
+            launch_date,
+            gender,
             file_id: response
         }
             
