@@ -5,7 +5,6 @@ const { google } = require('googleapis');
 const SCOPES = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile";
 const TOKEN_PATH = './resources/oAuth/token.json';
 
-
 async function readTokenFile(callback, oAuth2Client) {
     return new Promise(
         (resolve, reject) => {
@@ -51,18 +50,9 @@ async function authorize(credentials, callback) {
         redirect_uris[0]
     );
 
-
     const response = await readTokenFile(callback, oAuth2Client)
 
-
     return response
-    // Check if we have previously stored a token.
-    // fs.readFile(TOKEN_PATH, (err, token) => {
-    //     if (err) return getAccessToken(oAuth2Client, callback);
-
-    //     oAuth2Client.setCredentials(JSON.parse(token));
-    //     callback(oAuth2Client);
-    // });
 }
 
 /**
@@ -106,7 +96,7 @@ const sendVideo = (videoObject) =>
         try {
             const media = {
                 mimiType: "video/mp4",
-                body: fs.ReadStream(videoObject.body)
+                body: videoObject.body
             }
             const response = await drive.files.create({
                 requestBody: {
@@ -150,6 +140,6 @@ function listFiles(auth) {
 
 module.exports = async (videoObject) => {
     const response = await readCredentialsFile(videoObject)
-    
+
     return response
 }

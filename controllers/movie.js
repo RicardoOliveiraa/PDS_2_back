@@ -16,8 +16,6 @@ module.exports = {
             file
         } = req.body
 
-       
-
         const response = await sendMovieToDrive({ body: file, name: title })
 
         const MovieObj = {
