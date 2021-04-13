@@ -5,13 +5,45 @@ const { google } = require('googleapis');
 const SCOPES = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile";
 const TOKEN_PATH = './resources/oAuth/token.json';
 
+
+async function readTokenFile(callback, oAuth2Client) {
+    return new Promise(
+        (resolve, reject) => {
+            fs.readFile(TOKEN_PATH, async (err, token) => {
+                if (err) return getAccessToken(oAuth2Client, callback);
+        
+                oAuth2Client.setCredentials(JSON.parse(token));
+                const response = callback(oAuth2Client)
+
+                resolve(response);
+            })
+        }
+    )
+}
+
+async function readCredentialsFile(videoObject) {
+    return new Promise(
+        (resolve, reject) => {
+            fs.readFile('./resources/oAuth/credentials.json', (err, content) => {
+                if (err) return console.log('Erro tentando carregar o arquivo do segredo do cliente D=', err);
+                const response = authorize(JSON.parse(content), sendVideo(videoObject));
+
+                resolve(response)
+            });
+        }
+    )
+}
+
+
+
+
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
  * given callback function.
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback) {
+async function authorize(credentials, callback) {
     const { client_secret, client_id, redirect_uris } = credentials.web;
     const oAuth2Client = new google.auth.OAuth2(
         client_id, 
@@ -19,13 +51,18 @@ function authorize(credentials, callback) {
         redirect_uris[0]
     );
 
-    // Check if we have previously stored a token.
-    fs.readFile(TOKEN_PATH, (err, token) => {
-        if (err) return getAccessToken(oAuth2Client, callback);
 
-        oAuth2Client.setCredentials(JSON.parse(token));
-        callback(oAuth2Client);
-    });
+    const response = await readTokenFile(callback, oAuth2Client)
+
+
+    return response
+    // Check if we have previously stored a token.
+    // fs.readFile(TOKEN_PATH, (err, token) => {
+    //     if (err) return getAccessToken(oAuth2Client, callback);
+
+    //     oAuth2Client.setCredentials(JSON.parse(token));
+    //     callback(oAuth2Client);
+    // });
 }
 
 /**
@@ -69,7 +106,7 @@ const sendVideo = (videoObject) =>
         try {
             const media = {
                 mimiType: "video/mp4",
-                body: videoObject.body
+                body: fs.ReadStream(videoObject.body)
             }
             const response = await drive.files.create({
                 requestBody: {
@@ -78,8 +115,9 @@ const sendVideo = (videoObject) =>
                 },
                 media
             })
-
-            console.log("Aqui a resposta inferno!", response)
+        
+            console.log(response.data)
+            return response.data.id
         } catch (err) {
             console.log(err)
             console.log("Deu treta pra enviar o video cpx")
@@ -110,9 +148,8 @@ function listFiles(auth) {
     });
 }
 
-module.exports = (videoObject) => {
-    fs.readFile('./resources/oAuth/credentials.json', (err, content) => {
-        if (err) return console.log('Erro tentando carregar o arquivo do segredo do cliente D=', err);
-        authorize(JSON.parse(content), sendVideo(videoObject));
-    });
+module.exports = async (videoObject) => {
+    const response = await readCredentialsFile(videoObject)
+    
+    return response
 }

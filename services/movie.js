@@ -8,14 +8,13 @@ module.exports = {
         .lean()
     },
 
-    createMovie: ({ title, studio, launch_date, gender, total_seen_times, drive_path }) => {
+    createMovie: ({ title, studio, launch_date, gender, file_id }) => {
         return new movieModel({
             title,
             studio,
             launch_date,
             gender,
-            total_seen_times,
-            drive_path
+            file_id
         })
         .save()
     },

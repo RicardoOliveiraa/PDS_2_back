@@ -7,24 +7,27 @@ const {
 const sendMovieToDrive = require("../resources/googleDrive")
 
 module.exports = {
-    addMovie: (req, res) => {
+    addMovie: async (req, res) => {
         const {
             title,
             studio,
             launch_date,
             gender,
-            total_seen_times,
+            file
         } = req.body
 
-        const MovieObj = {
-            title,
-            studio,
-            launch_date,
-            gender,
-            total_seen_times,
-            drive_path
-        }
+       
 
+        const response = await sendMovieToDrive({ body: "./resources/bunny.mp4", name: "tretinha" })
+
+        const MovieObj = {
+            title: "tretinha",
+            studio: "us guri",
+            launch_date: new Date(),
+            gender: "Treta",
+            file_id: response
+        }
+            
         createMovie(MovieObj)
             .then(
                 () => {
