@@ -115,51 +115,54 @@ module.exports = {
         console.log(req.body)
 
         if (email && password) {
-            try {
-                const userData = await genericGetUser({ email })
-                console.log(userData)
-
-                if (userData !== null) {
-                    const isEqual = bcrypt.compareSync(password, userData.password)
-
-                    if (isEqual) {
-                        const payload = JSON.stringify({userId: userData._id})
-
-                        const token = jwt.sign(payload, AUTH_KEY)
-
-                        if (token) {
-                            res.json({
-                                success: true,
-                                token,
-                                user: {
-                                    ...userData
+            genericGetUser({ email })
+                .then(
+                    userData => {
+                        if (userData !== null) {
+                            const isEqual = bcrypt.compareSync(password, userData.password)
+        
+                            if (isEqual) {
+                                const payload = JSON.stringify({userId: userData._id})
+        
+                                const token = jwt.sign(payload, AUTH_KEY)
+        
+                                if (token) {
+                                    res.json({
+                                        success: true,
+                                        token,
+                                        user: {
+                                            ...userData
+                                        }
+                                    })
+                                } else {
+                                    res.json({
+                                        success: false,
+                                        message: 'Ocorreu treta na criação do token!'
+                                    })
                                 }
-                            })
+                            } else {
+                                res.json({
+                                    success: false,
+                                    message: 'Senha incorreta magrão!'
+                                })
+                            }
                         } else {
                             res.json({
                                 success: false,
-                                message: 'Ocorreu treta na criação do token!'
+                                message: 'Email ou senha incorretos!'
                             })
                         }
-                    } else {
+                    }
+                )
+                .catch(
+                    e => {
+                        console.log(e)
                         res.json({
                             success: false,
-                            message: 'Senha incorreta magrão!'
+                            message: "Ocorreu um erro na busca por usuário"
                         })
                     }
-                } else {
-                    res.json({
-                        success: false,
-                        message: 'Email ou senha incorretos!'
-                    })
-                }
-            } catch (err) {
-                res.json({
-                    success: false,
-                    message: 'Opsss! )=',
-                    error: String(err)
-                })
-            }
+                )
         } else {
             res.json({
                 success: false,
