@@ -112,8 +112,6 @@ module.exports = {
             password
         } = req.body
 
-        console.log(req.body)
-
         if (email && password) {
             genericGetUser({ email })
                 .then(
@@ -123,7 +121,6 @@ module.exports = {
         
                             if (isEqual) {
                                 const payload = JSON.stringify({userId: userData._id})
-                                console.log(AUTH_KEY)
                                 const token = jwt.sign(payload, AUTH_KEY)
         
                                 if (token) {
