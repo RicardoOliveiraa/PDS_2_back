@@ -112,6 +112,8 @@ module.exports = {
             password
         } = req.body
 
+        console.log(req.body)
+
         if (email && password) {
             try {
                 const userData = await genericGetUser({ email })
