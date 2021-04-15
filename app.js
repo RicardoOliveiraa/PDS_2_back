@@ -7,7 +7,7 @@ moment.tz.setDefault("America/Sao_Paulo");
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
-AUTH_KEY = process.env.NODE_ENV ? process.env.NODE_ENV.AUTH_KEY: process.env.AUTH_KEY
+AUTH_KEY = process.env.NODE_ENV ? process.env.NODE_ENV.AUTH_KEY || process.env.AUTH_KEY : process.env.AUTH_KEY
 
 const {
     connect,
