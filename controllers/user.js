@@ -119,7 +119,7 @@ module.exports = {
                 const userData = await genericGetUser({ email })
                 console.log(userData)
 
-                if (userData) {
+                if (userData !== null) {
                     const isEqual = bcrypt.compareSync(password, userData.password)
 
                     if (isEqual) {
