@@ -1,8 +1,4 @@
 const router = express.Router()
-multipart = require("connect-multiparty")
-multipartMiddleware = multipart({
-    maxFilesSize: 1024 * 5024,
-})
 
 const {
     addMovie,

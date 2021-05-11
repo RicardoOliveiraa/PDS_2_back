@@ -4,6 +4,10 @@ mongoose = require('mongoose');
 Schema = mongoose.Schema;
 const cors = require('cors');
 AUTH_KEY = process.env.NODE_ENV ? process.env.NODE_ENV.AUTH_KEY || process.env.AUTH_KEY : process.env.AUTH_KEY
+multipart = require("connect-multiparty")
+multipartMiddleware = multipart({
+    maxFilesSize: 1024 * 5024,
+})
 
 const {
     connect,
@@ -12,6 +16,14 @@ const {
 
 const app = express();
 const http = require('http');
+
+app.use(
+    express.urlencoded({
+      extended: true
+    })
+  )
+  
+app.use(express.json())
 
 const port = process.env.PORT || '4020';
 app.set('port', port);
