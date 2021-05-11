@@ -95,8 +95,8 @@ const sendVideo = (videoObject) =>
 
         try {
             const media = {
-                mimiType: "video/mp4",
-                body: videoObject.body
+                mimeType: videoObject.type,
+                body:  fs.ReadStream(videoObject.body.path)
             }
             const response = await drive.files.create({
                 requestBody: {

@@ -1,4 +1,8 @@
 const router = express.Router()
+multipart = require("connect-multiparty")
+multipartMiddleware = multipart({
+    maxFilesSize: 1024 * 5024,
+})
 
 const {
     addMovie,
@@ -7,5 +11,5 @@ const {
 
 module.exports =
     router
-        .post('/', addMovie)
+        .post('/', multipartMiddleware, addMovie)
         .get('/:gender', getMovie)

@@ -1,7 +1,6 @@
 const {
     genericGetMovie,
-    createMovie,
-    genericUpdateMovie
+    createMovie
 } = require('../services/movie')
 
 const sendMovieToDrive = require("../resources/googleDrive")
@@ -10,23 +9,33 @@ module.exports = {
     addMovie: async (req, res) => {
         const {
             title,
-            studio,
-            launch_date,
             gender,
-            file
+            description
         } = req.body
 
-        const response = await sendMovieToDrive({ body: file, name: title })
+        const {
+            movie,
+            image_big,
+            image_medium,
+            image_small,
+        } = req.files
 
-        const MovieObj = {
+        const movie_id = await sendMovieToDrive({ body: movie, name: title, type: "video/mp4" })
+        const big_image_id = await sendMovieToDrive({ body: image_big, name: `${title}_image_big`, type: "image/jpeg" })
+        const medium_image_id = await sendMovieToDrive({ body: image_medium, name: `${title}_image_medium`, type: "image/jpeg" })
+        const small_image_id = await sendMovieToDrive({ body: image_small, name: `${title}_image_small`, type: "image/jpeg" })
+
+        const movieObject = {
             title,
-            studio,
-            launch_date,
             gender,
-            file_id: response
+            movie_id,
+            small_image_id,
+            big_image_id,
+            medium_image_id,
+            description
         }
-            
-        createMovie(MovieObj)
+
+        createMovie(movieObject)
             .then(
                 () => {
                     res.json({

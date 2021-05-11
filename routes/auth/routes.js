@@ -3,7 +3,7 @@ const router = express.Router()
 
 router.use(
     (req, res, next) => {
-        const token = req.body.token || req.query.token || req.headers.authorization
+        const token = req.headers.authorization
 
         if (token) {
             jwt.verify(token, AUTH_KEY, (err, decoded) => {

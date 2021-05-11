@@ -8,13 +8,23 @@ module.exports = {
         .lean()
     },
 
-    createMovie: ({ title, studio, launch_date, gender, file_id }) => {
+    createMovie: ({ 
+        title, 
+        gender, 
+        movie_id,
+        small_image_id,
+        big_image_id,
+        medium_image_id,
+        description
+    }) => {
         return new movieModel({
             title,
-            studio,
-            launch_date,
             gender,
-            file_id
+            movie_id,
+            small_image_id,
+            big_image_id,
+            medium_image_id,
+            description
         })
         .save()
     },

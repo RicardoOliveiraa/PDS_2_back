@@ -2,10 +2,6 @@ require('dotenv').config();
 express = require('express');
 mongoose = require('mongoose');
 Schema = mongoose.Schema;
-moment = require("moment-timezone");
-moment.tz.setDefault("America/Sao_Paulo");
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
 const cors = require('cors');
 AUTH_KEY = process.env.NODE_ENV ? process.env.NODE_ENV.AUTH_KEY || process.env.AUTH_KEY : process.env.AUTH_KEY
 
@@ -25,18 +21,6 @@ const server = http.createServer(app);
 if (process.env.NODE_ENV && !process.env.NODE_ENV.includes('test')) {
     app.use(morgan('combined'));
 }
-
-app.use(
-    bodyParser.json({
-      limit: "1mb"
-    })
-);
-app.use(
-    bodyParser.urlencoded({
-      limit: "1mb",
-      extended: true
-    })
-)
 
 app.use(express.static(__dirname + "/build"))
 
