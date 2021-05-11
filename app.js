@@ -18,10 +18,6 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-if (process.env.NODE_ENV && !process.env.NODE_ENV.includes('test')) {
-    app.use(morgan('combined'));
-}
-
 app.use(express.static(__dirname + "/build"))
 
 app.get('/', (req, res) => {
