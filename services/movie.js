@@ -38,5 +38,8 @@ module.exports = {
                 ...props
             )
             .exec()
-    }
+    },
+
+    getAllMovies: () => 
+        movieModel.find({}).lean()
 }

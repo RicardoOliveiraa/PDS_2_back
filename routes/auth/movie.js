@@ -8,4 +8,4 @@ const {
 module.exports =
     router
         .post('/', multipartMiddleware, addMovie)
-        .get('/:gender', getMovie)
+        .get('/', getMovie)

@@ -1,6 +1,7 @@
 const {
     genericGetMovie,
-    createMovie
+    createMovie,
+    getAllMovies
 } = require('../services/movie')
 
 const sendMovieToDrive = require("../resources/googleDrive")
@@ -56,34 +57,23 @@ module.exports = {
     },
 
     getMovie: (req, res) => {
-        const {
-            gender
-        } = req.params
-
-        if (gender) {
-            genericGetMovie({ gender })
-                .then(
-                    (dataMovie) => {
-                        res.json({
-                            success: true,
-                            data: dataMovie
-                        })
-                    }
-                )
-                .catch(
-                    err => {
-                        console.log(err)
-                        res.json({
-                            success: false,
-                            message: "Ocorreu um erro na busca por filme!"
-                        })
-                    }
-                )
-        } else {
-            res.json({
-                success: false,
-                message: "O genero do filme é obrigatorio!"
-            })
-        }
+        getAllMovies()
+            .then(
+                (dataMovie) => {
+                    res.json({
+                        success: true,
+                        data: dataMovie
+                    })
+                }
+            )
+            .catch(
+                err => {
+                    console.log(err)
+                    res.json({
+                        success: false,
+                        message: "Ocorreu um erro na busca por filme!"
+                    })
+                }
+            )
     }
 }
