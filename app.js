@@ -6,7 +6,7 @@ const cors = require('cors');
 AUTH_KEY = process.env.NODE_ENV ? process.env.NODE_ENV.AUTH_KEY || process.env.AUTH_KEY : process.env.AUTH_KEY
 multipart = require("connect-multiparty")
 multipartMiddleware = multipart({
-    maxFilesSize: 1024 * 6024,
+    maxFilesSize: 1024 * 10024,
 })
 
 const {
