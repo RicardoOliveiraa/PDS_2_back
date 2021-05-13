@@ -106,8 +106,8 @@ const sendVideo = (videoObject) =>
                 media
             })
 
-            const fileUrl = await drive.files.get({ fileId: response.data.id, fields: 'webViewLink'})
-            return fileUrl.data.webViewLink
+            // const fileUrl = await drive.files.get({ fileId: response.data.id, fields: 'webViewLink'})
+            return response.data.id
         } catch (err) {
             console.log(err)
             console.log("Deu treta pra enviar o video cpx")
