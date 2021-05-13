@@ -10,21 +10,21 @@ module.exports = {
 
     createMovie: ({ 
         title, 
-        gender, 
-        movie_id,
-        small_image_id,
-        big_image_id,
-        medium_image_id,
-        description
+        genre, 
+        movie_url,
+        small_image_url,
+        big_image_url,
+        description,
+        maturity
     }) => {
         return new movieModel({
             title,
-            gender,
-            movie_id,
-            small_image_id,
-            big_image_id,
-            medium_image_id,
-            description
+            genre,
+            movie_url,
+            small_image_url,
+            big_image_url,
+            description,
+            maturity
         })
         .save()
     },

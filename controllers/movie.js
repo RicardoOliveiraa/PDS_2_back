@@ -6,34 +6,37 @@ const {
 
 const sendMovieToDrive = require("../resources/googleDrive")
 
+const {
+    refresh_token
+} = require("../resources/oAuth/token.json")
+
 module.exports = {
     addMovie: async (req, res) => {
         const {
             title,
-            gender,
-            description
+            genre,
+            description,
+            maturity
         } = req.body
 
         const {
             movie,
             image_big,
-            image_medium,
             image_small,
         } = req.files
 
-        const movie_id = await sendMovieToDrive({ body: movie, name: title, type: "video/mp4" })
-        const big_image_id = await sendMovieToDrive({ body: image_big, name: `${title}_image_big`, type: "image/jpeg" })
-        const medium_image_id = await sendMovieToDrive({ body: image_medium, name: `${title}_image_medium`, type: "image/jpeg" })
-        const small_image_id = await sendMovieToDrive({ body: image_small, name: `${title}_image_small`, type: "image/jpeg" })
+        const movie_url = await sendMovieToDrive({ body: movie, name: title, type: "video/mp4" })
+        const big_image_url = await sendMovieToDrive({ body: image_big, name: `${title}_image_big`, type: "image/jpeg" })
+        const small_image_url = await sendMovieToDrive({ body: image_small, name: `${title}_image_small`, type: "image/jpeg" })
 
         const movieObject = {
             title,
-            gender,
-            movie_id,
-            small_image_id,
-            big_image_id,
-            medium_image_id,
-            description
+            genre,
+            movie_url,
+            small_image_url,
+            big_image_url,
+            description,
+            maturity
         }
 
         createMovie(movieObject)
@@ -62,7 +65,8 @@ module.exports = {
                 (dataMovie) => {
                     res.json({
                         success: true,
-                        data: dataMovie
+                        movies: dataMovie,
+                        token_google: refresh_token
                     })
                 }
             )
